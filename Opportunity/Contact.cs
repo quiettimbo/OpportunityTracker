@@ -5,11 +5,10 @@ using System.Text;
 
 namespace Opportunity
 {
-    public class Role
+    public class Contact : IContact
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public string Id { get; set; }
+        public virtual string DisplayName => throw new NotImplementedException();
     }
 }

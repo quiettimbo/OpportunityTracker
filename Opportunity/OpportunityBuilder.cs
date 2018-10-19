@@ -6,11 +6,11 @@ namespace Opportunity
 {
     public class OpportunityBuilder : OpportunityBuilder.IRoleBuilder
     {
-        private readonly IContact contact;
+        private readonly Contact contact;
         private Company company;
         private Role role;
 
-        public OpportunityBuilder(IContact contact)
+        public OpportunityBuilder(Contact contact)
         {
             this.contact = contact;
 

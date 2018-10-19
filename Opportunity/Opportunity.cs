@@ -1,19 +1,27 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Opportunity
 {
     public class Opportunity
     {
-        public IContact Contact { get; set; }
+        public Contact Contact { get; set; }
         public Role Role { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
-        public Opportunity(IContact contact)
+        public Opportunity()
+        {
+
+        }
+
+        public Opportunity(Contact contact):this()
         {
             Contact = contact;
             Time = DateTime.Now;
         }
 
-        public Opportunity(IContact contact, Company company) : this(contact)
+        public Opportunity(Contact contact, Company company) : this(contact)
         {
             Company = company;
         }

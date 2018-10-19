@@ -4,13 +4,13 @@ using System.Text;
 
 namespace Opportunity
 {
-    public class Person : IContact
+    public class Person : Contact
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public Company Company { get; set; }
 
-        public string DisplayName => $"{LastName}, {FirstName}";
+        public override string DisplayName => $"{LastName}, {FirstName}";
 
         public object Email { get; set; }
     }
