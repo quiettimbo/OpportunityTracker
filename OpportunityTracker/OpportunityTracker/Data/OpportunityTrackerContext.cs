@@ -16,6 +16,5 @@ namespace OpportunityTracker.Data
 
         public DbSet<Opportunity.Opportunity> Opportunities { get; set; }
         public DbSet<Company> Companies { get; set; }
-        public DbSet<Role> Roles { get; set; }
     }
 }

@@ -18,19 +18,18 @@ namespace OpportunityTracker.Data
                 return;   // DB has been seeded
             }
 
-            var roles = new Role[]
-            {
-                new Role{Title="Software Architect", Description="Yet another arch role"}
-            };
+            var comp1 = new Company("Solidium");
 
-            foreach (var rr in roles)
-            {
-                context.Roles.Add(rr);
-            }
 
             var opps = new Opportunity.Opportunity[]
             {
-                new Opportunity.Opportunity{ Time=DateTime.Now, Role = roles[0]}
+                new Opportunity.Opportunity
+                {
+                    Time =DateTime.Now,
+                    Title ="Software Architect",
+                    Description ="Yet another arch role",
+                    Company = comp1,
+                }
             };
             foreach (var s in opps)
             {

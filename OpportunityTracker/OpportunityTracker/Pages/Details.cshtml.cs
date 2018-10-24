@@ -29,7 +29,6 @@ namespace OpportunityTracker.Pages
             }
 
             Opportunity = await _context.Opportunities
-                                    .Include(o => o.Role)
                                     .Include(o => o.Company)
                                     .FirstOrDefaultAsync(m => m.Id == id);
 

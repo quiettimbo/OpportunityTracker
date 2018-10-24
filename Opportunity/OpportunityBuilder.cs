@@ -4,11 +4,13 @@ using System.Text;
 
 namespace Opportunity
 {
-    public class OpportunityBuilder : OpportunityBuilder.IRoleBuilder
+    public class OpportunityBuilder : OpportunityBuilder.IActivityBuilder
     {
         private readonly Contact contact;
         private Company company;
-        private Role role;
+        private IList<Activity> activities = new List<Activity>();
+        private string Title;
+        private string Description;
 
         public OpportunityBuilder(Contact contact)
         {
@@ -20,8 +22,13 @@ namespace Opportunity
             var op = new Opportunity(contact)
             {
                 Company = company,
-                Role = role
+                Title = Title,
+                Description = Description,
             };
+            foreach(Activity act in activities)
+            {
+                op.AddActivity(act);
+            }
             return op;
         }
 
@@ -37,37 +44,39 @@ namespace Opportunity
             return this;
         }
 
-        public IOpportunityBuilder As(Role role)
+        public IOpportunityBuilder As(string title)
         {
-            this.role = role;
-            return this;
-        }
-        public OpportunityBuilder.IRoleBuilder As(string title)
-        {
-            this.role = new Role
-            {
-                Title = title
-            };
+            this.Title = title;
             return this;
         }
 
-        IRoleBuilder IRoleBuilder.Doing(string description)
+        public IOpportunityBuilder Doing(string description)
         {
-            role.Description = description;
+            Description = description;
             return this;
         }
 
-        public interface IRoleBuilder : OpportunityBuilder.IOpportunityBuilder
+        public IActivityBuilder Action(string desc)
         {
-            OpportunityBuilder.IRoleBuilder Doing(string description);
+            activities.Add(new Activity { Description = desc });
+            return this;
+        }
+
+        public IActivityBuilder Action(Activity activity)
+        {
+            throw new NotImplementedException();
         }
 
         public interface IOpportunityBuilder
         {
             Opportunity Opportunity();
-            OpportunityBuilder.IRoleBuilder As(string title);
-            IOpportunityBuilder As(Role role);
+            IOpportunityBuilder As(string title);
+            IOpportunityBuilder Doing(string title);
             IOpportunityBuilder With(Company company);
+        }
+
+        public interface IActivityBuilder : IOpportunityBuilder
+        {
         }
     }
 }
