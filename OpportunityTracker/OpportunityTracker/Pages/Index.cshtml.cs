@@ -19,11 +19,20 @@ namespace OpportunityTracker.Pages
             _context = context;
         }
 
+        public bool? showIsActive;
+
         public IList<Opportunity.Opportunity> Opportunity { get;set; }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(bool? isActive)
         {
-            Opportunity = await _context.Opportunities.ToListAsync();
+            showIsActive = isActive;
+
+            IQueryable<Opportunity.Opportunity> query = _context.Opportunities;
+            if (isActive.HasValue)
+            {
+                query = query.Where(o => o.IsActive == isActive.Value);
+            }
+            Opportunity = await query.ToListAsync();
         }
     }
 }
