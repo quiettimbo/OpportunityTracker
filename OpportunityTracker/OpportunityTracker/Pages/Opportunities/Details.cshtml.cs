@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +9,9 @@ namespace OpportunityTracker.Pages.Opportunities
 {
     public class DetailsModel : PageModel
     {
-        private readonly OpportunityTracker.Data.OpportunityTrackerContext _context;
+        private readonly OpportunityTrackerContext _context;
 
-        public DetailsModel(OpportunityTracker.Data.OpportunityTrackerContext context)
+        public DetailsModel(OpportunityTrackerContext context)
         {
             _context = context;
         }

@@ -31,42 +31,51 @@ namespace OpportunityTracker.Pages.Opportunities
             }
 
             Opportunity = await _context.Opportunities
-                .Include(o => o.Company).FirstOrDefaultAsync(m => m.OpportunityID == id);
+                .Include(o => o.Company)
+                .FirstOrDefaultAsync(m => m.OpportunityID == id);
 
             if (Opportunity == null)
             {
                 return NotFound();
             }
-           ViewData["CompanyID"] = new SelectList(_context.Companies, "CompanyID", "CompanyID");
+
+            ViewData["CompanyID"] = new SelectList(_context.Companies, "CompanyID", "CompanyID");
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Opportunity).State = EntityState.Modified;
+            //_context.Attach(Opportunity).State = EntityState.Modified;
+            var oppToUpdate = await _context.Opportunities.FindAsync(id);
 
-            try
+            if (await TryUpdateModelAsync(
+                oppToUpdate,
+                "opportunity",
+                o => o.Description, o => o.Title, o => o.IsActive, o => o.CompanyID, o => o.Time))
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OpportunityExists(Opportunity.OpportunityID))
+                try
                 {
-                    return NotFound();
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!OpportunityExists(Opportunity.OpportunityID))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToPage("./Index");
             }
-
-            return RedirectToPage("./Index");
+            return Page();
         }
 
         private bool OpportunityExists(int id)

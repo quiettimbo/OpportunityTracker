@@ -35,10 +35,21 @@ namespace OpportunityTracker.Pages.Opportunities
                 return Page();
             }
 
-            _context.Opportunities.Add(Opportunity);
-            await _context.SaveChangesAsync();
+            var emptyOpp = new OpportunityData.Opportunity();
+            emptyOpp.Time = DateTime.Now;
+            emptyOpp.IsActive = true;
 
-            return RedirectToPage("./Index");
+            if (await TryUpdateModelAsync(
+                emptyOpp,
+                "opportunity",
+                o => o.Description, o => o.Title, o => o.CompanyID))
+            {
+                _context.Opportunities.Add(emptyOpp);
+                await _context.SaveChangesAsync();
+
+                return RedirectToPage("./Index");
+            }
+            return null;
         }
     }
 }

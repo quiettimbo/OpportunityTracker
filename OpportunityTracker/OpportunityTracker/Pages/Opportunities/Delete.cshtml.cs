@@ -21,8 +21,9 @@ namespace OpportunityTracker.Pages.Opportunities
 
         [BindProperty]
         public OpportunityData.Opportunity Opportunity { get; set; }
+        public string ErrorMessage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id, bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -30,12 +31,20 @@ namespace OpportunityTracker.Pages.Opportunities
             }
 
             Opportunity = await _context.Opportunities
-                .Include(o => o.Company).FirstOrDefaultAsync(m => m.OpportunityID == id);
+                .Include(o => o.Company)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.OpportunityID == id);
 
             if (Opportunity == null)
             {
                 return NotFound();
             }
+
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ErrorMessage = "Delete failed. Try again";
+            }
+
             return Page();
         }
 
@@ -48,13 +57,22 @@ namespace OpportunityTracker.Pages.Opportunities
 
             Opportunity = await _context.Opportunities.FindAsync(id);
 
-            if (Opportunity != null)
+            if (Opportunity == null)
+            {
+                return NotFound();
+            }
+            try
             {
                 _context.Opportunities.Remove(Opportunity);
                 await _context.SaveChangesAsync();
+                return RedirectToPage("./Index");
             }
-
-            return RedirectToPage("./Index");
+            catch (DbUpdateException /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log.)
+                return RedirectToAction("./Delete",
+                                     new { id, saveChangesError = true });
+            }
         }
     }
 }
