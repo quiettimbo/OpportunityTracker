@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Opportunity
+namespace OpportunityData
 {
     public class Person : Contact
     {
@@ -10,8 +10,16 @@ namespace Opportunity
         public string LastName { get; set; }
         public Company Company { get; set; }
 
-        public override string DisplayName => $"{LastName}, {FirstName}";
+        public override string DisplayName
+        {
+            get
+            {
+                return Company != null 
+                    ? $"{LastName}, {FirstName} of {Company.Name}"
+                    : $"{LastName}, {FirstName}";
+            }
+        }
 
-        public object Email { get; set; }
+        public string Email { get; set; }
     }
 }

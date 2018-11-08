@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Opportunity
+namespace OpportunityData
 {
     public class Opportunity
     {
         private readonly IList<Activity> activities = new List<Activity>();
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int OpportunityID { get; set; }
         public Contact PrimaryContact { get; set; }
         public string Title { get; set; }
+        [StringLength(4096, ErrorMessage = "Description Cannot be longer than 4086 chars")]
         public string Description { get; set; }
         public Company Company { get; set; }
+        public int CompanyID { get; set; }
         public DateTime Time { get; set; }
-        public IEnumerable<Activity> Activities { get => activities; }
+
+        public ICollection<Activity> Activities { get; set; }
         public bool IsActive { get; set; }
 
         public Opportunity()

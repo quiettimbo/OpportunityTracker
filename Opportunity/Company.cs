@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Opportunity
+namespace OpportunityData
 {
     public class Company
     {
@@ -19,6 +19,6 @@ namespace Opportunity
 
         public string Name { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int CompanyID { get; set; }
     }
 }

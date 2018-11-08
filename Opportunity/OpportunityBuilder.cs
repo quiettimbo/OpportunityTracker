@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Opportunity
+namespace OpportunityData
 {
     public class OpportunityBuilder : OpportunityBuilder.IActivityBuilder
     {

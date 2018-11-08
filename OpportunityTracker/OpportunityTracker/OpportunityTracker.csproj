@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Opportunity\Opportunity.csproj" />
+    <ProjectReference Include="..\..\Opportunity\OpportunityData.csproj" />
   </ItemGroup>
 
 </Project>

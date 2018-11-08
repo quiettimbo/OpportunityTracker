@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Opportunity;
+using OpportunityData;
 using OpportunityTracker.Data;
 
-namespace OpportunityTracker.Pages
+namespace OpportunityTracker.Pages.Opportunities
 {
     public class EditModel : PageModel
     {
@@ -21,7 +21,7 @@ namespace OpportunityTracker.Pages
         }
 
         [BindProperty]
-        public Opportunity.Opportunity Opportunity { get; set; }
+        public OpportunityData.Opportunity Opportunity { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,12 +30,14 @@ namespace OpportunityTracker.Pages
                 return NotFound();
             }
 
-            Opportunity = await _context.Opportunities.FirstOrDefaultAsync(m => m.Id == id);
+            Opportunity = await _context.Opportunities
+                .Include(o => o.Company).FirstOrDefaultAsync(m => m.OpportunityID == id);
 
             if (Opportunity == null)
             {
                 return NotFound();
             }
+           ViewData["CompanyID"] = new SelectList(_context.Companies, "CompanyID", "CompanyID");
             return Page();
         }
 
@@ -54,7 +56,7 @@ namespace OpportunityTracker.Pages
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!OpportunityExists(Opportunity.Id))
+                if (!OpportunityExists(Opportunity.OpportunityID))
                 {
                     return NotFound();
                 }
@@ -69,7 +71,7 @@ namespace OpportunityTracker.Pages
 
         private bool OpportunityExists(int id)
         {
-            return _context.Opportunities.Any(e => e.Id == id);
+            return _context.Opportunities.Any(e => e.OpportunityID == id);
         }
     }
 }

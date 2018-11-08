@@ -1,4 +1,4 @@
-﻿using Opportunity;
+﻿using OpportunityData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +19,36 @@ namespace OpportunityTracker.Data
             }
 
             var comp1 = new Company("Solidium");
+            var comp2 = new Company("Powersoft");
+            var comp3 = new Company("Logica");
 
+            context.Companies.Add(comp1);
+            context.Companies.Add(comp2);
+            context.Companies.Add(comp3);
 
-            var opps = new Opportunity.Opportunity[]
+            var opps = new OpportunityData.Opportunity[]
             {
-                new Opportunity.Opportunity
+                new OpportunityData.Opportunity
                 {
                     Time =DateTime.Now,
                     Title ="Software Architect",
                     Description ="Yet another arch role",
                     Company = comp1,
+                    Activities = new Activity[]
+                    {
+                        new Activity
+                        {
+                            Date = DateTime.Now,
+                            Description = "Just called him",
+                            Result = Activity.ResultType.NoWork,
+                            Contact = new Person
+                            {
+                                FirstName = "Fred",
+                                LastName = "Blogs",
+                                Company = comp1
+                            }
+                        }
+                    }
                 }
             };
             foreach (var s in opps)

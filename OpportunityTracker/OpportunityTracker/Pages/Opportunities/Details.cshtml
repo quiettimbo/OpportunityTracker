@@ -1,0 +1,79 @@
+﻿@page "{id:int}"
+@model OpportunityTracker.Pages.Opportunities.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Opportunity</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Opportunity.Title)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Opportunity.Title)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Opportunity.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Opportunity.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Opportunity.Company)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Opportunity.Company.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Opportunity.Time)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Opportunity.Time)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Opportunity.IsActive)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Opportunity.IsActive)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Opportunity.Activities)
+        </dt>
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Date</th>
+                    <th>Contact</th>
+                    <th>Activity Description</th>
+                    <th>Grade</th>
+                </tr>
+                @foreach (var item in Model.Opportunity.Activities)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Contact.DisplayName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Result)
+                    </td>
+                </tr>
+                }
+            </table>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Opportunity.OpportunityID">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

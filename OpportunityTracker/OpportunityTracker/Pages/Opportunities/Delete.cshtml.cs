@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Opportunity;
+using OpportunityData;
 using OpportunityTracker.Data;
 
-namespace OpportunityTracker.Pages
+namespace OpportunityTracker.Pages.Opportunities
 {
     public class DeleteModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace OpportunityTracker.Pages
         }
 
         [BindProperty]
-        public Opportunity.Opportunity Opportunity { get; set; }
+        public OpportunityData.Opportunity Opportunity { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,7 +29,8 @@ namespace OpportunityTracker.Pages
                 return NotFound();
             }
 
-            Opportunity = await _context.Opportunities.FirstOrDefaultAsync(m => m.Id == id);
+            Opportunity = await _context.Opportunities
+                .Include(o => o.Company).FirstOrDefaultAsync(m => m.OpportunityID == id);
 
             if (Opportunity == null)
             {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Opportunity
+namespace OpportunityData
 {
     public class Website : Contact
     {
@@ -11,12 +11,7 @@ namespace Opportunity
 
         }
 
-        public Website(Uri uri):this()
-        {
-            Uri = uri;
-        }
-
-        public Uri Uri { get; set; }
+        public string Uri { get; set; }
 
         public override string DisplayName => Uri.ToString();
     }

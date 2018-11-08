@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Opportunity;
+using OpportunityData;
 using OpportunityTracker.Data;
 
-namespace OpportunityTracker.Pages
+namespace OpportunityTracker.Pages.Opportunities
 {
     public class DetailsModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace OpportunityTracker.Pages
             _context = context;
         }
 
-        public Opportunity.Opportunity Opportunity { get; set; }
+        public OpportunityData.Opportunity Opportunity { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,8 +29,12 @@ namespace OpportunityTracker.Pages
             }
 
             Opportunity = await _context.Opportunities
-                                    .Include(o => o.Company)
-                                    .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(o => o.Company)
+                .Include(o => o.Activities)
+                .ThenInclude(y => y.Contact)
+                .ThenInclude(c => (c as Person).Company)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.OpportunityID == id);
 
             if (Opportunity == null)
             {

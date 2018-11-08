@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Opportunity;
+using OpportunityData;
 using OpportunityTracker.Data;
 
-namespace OpportunityTracker.Pages
+namespace OpportunityTracker.Pages.Opportunities
 {
     public class CreateModel : PageModel
     {
@@ -21,11 +21,12 @@ namespace OpportunityTracker.Pages
 
         public IActionResult OnGet()
         {
+        ViewData["CompanyID"] = new SelectList(_context.Companies, "CompanyID", "CompanyID");
             return Page();
         }
 
         [BindProperty]
-        public Opportunity.Opportunity Opportunity { get; set; }
+        public OpportunityData.Opportunity Opportunity { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -34,21 +35,10 @@ namespace OpportunityTracker.Pages
                 return Page();
             }
 
-            var emptyOpportunity = new Opportunity.Opportunity();
+            _context.Opportunities.Add(Opportunity);
+            await _context.SaveChangesAsync();
 
-            // prevents overposting - alternatively use a ViewModel
-            if (await TryUpdateModelAsync<Opportunity.Opportunity>(
-                emptyOpportunity,
-                "opportunity",
-                o => o.Time))
-            {
-                _context.Opportunities.Add(emptyOpportunity);
-                await _context.SaveChangesAsync();
-
-                return RedirectToPage("./Index");
-            }
-
-            return null;
+            return RedirectToPage("./Index");
         }
     }
 }

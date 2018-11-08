@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Opportunity
+namespace OpportunityData
 {
     public class Contact : IContact
     {
