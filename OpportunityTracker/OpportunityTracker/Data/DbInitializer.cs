@@ -10,7 +10,7 @@ namespace OpportunityTracker.Data
     {
         public static void Initialize(OpportunityTrackerContext context)
         {
-            context.Database.EnsureCreated();
+            //context.Database.EnsureCreated();
 
             // Look for any opportunities.
             if (context.Opportunities.Any())

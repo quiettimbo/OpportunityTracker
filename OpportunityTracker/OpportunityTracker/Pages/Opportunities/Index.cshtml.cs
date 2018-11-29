@@ -11,19 +11,79 @@ namespace OpportunityTracker.Pages.Opportunity
 {
     public class IndexModel : PageModel
     {
-        private readonly OpportunityTracker.Data.OpportunityTrackerContext _context;
+        private readonly OpportunityTrackerContext _context;
 
-        public IndexModel(OpportunityTracker.Data.OpportunityTrackerContext context)
+
+        public IndexModel(OpportunityTrackerContext context)
         {
             _context = context;
         }
 
-        public IList<OpportunityData.Opportunity> Opportunity { get;set; }
+        public string TitleSort { get; set; }
+        public string TimeSort { get; set; }
+        public string DescriptionSort { get; set; }
+        public string CompanySort { get; set; }
+        public bool? IsActiveFilter { get; set; }
+        public string CurrentSort { get; set; }
 
-        public async Task OnGetAsync()
+        public PaginatedList<OpportunityData.Opportunity> Opportunity { get;set; }
+
+        public async Task OnGetAsync(string sortOrder, bool? isActive,
+            int? pageIndex)
         {
-            Opportunity = await _context.Opportunities
-                .Include(o => o.Company).ToListAsync();
+            CurrentSort = sortOrder;
+            TitleSort = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            TimeSort = sortOrder == "Time" ? "Time_desc" : "Time";
+            DescriptionSort = sortOrder == "Description" ? "Desc_desc" : "Description";
+            CompanySort = sortOrder == "Company" ? "Company_desc" : "Company";
+            if (isActive.HasValue)
+            {
+                pageIndex = 1;
+            }
+            else
+            {
+                isActive = IsActiveFilter;
+            }
+            IsActiveFilter = isActive;
+
+            IQueryable<OpportunityData.Opportunity> query = _context.Opportunities
+                .Include(o => o.Company);
+
+            if (IsActiveFilter.HasValue)
+            {
+                query = query.Where(o => o.IsActive == IsActiveFilter.Value);
+            }
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    query = query.OrderByDescending(o => o.Title);
+                    break;
+                case "Description":
+                    query = query.OrderBy(o => o.Description);
+                    break;
+                case "Desc_desc":
+                    query = query.OrderByDescending(o => o.Description);
+                    break;
+                case "Company":
+                    query = query.OrderBy(o => o.Company.Name);
+                    break;
+                case "Company_desc":
+                    query = query.OrderByDescending(o => o.Company.Name);
+                    break;
+                case "Time":
+                    query = query.OrderBy(o => o.Time);
+                    break;
+                case "Time_desc":
+                    query = query.OrderByDescending(o => o.Time);
+                    break;
+                default:
+                    query = query.OrderBy(o => o.Title);
+                    break;
+            }
+
+            int pageSize = 5;
+            Opportunity = await PaginatedList<OpportunityData.Opportunity>
+                .CreateAsync(query.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
     }
 }

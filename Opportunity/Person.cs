@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace OpportunityData
 {
     public class Person : Contact
     {
+        [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
         public string FirstName { get; set; }
+        [StringLength(50, ErrorMessage = "Last name cannot be longer than 50 characters.")]
         public string LastName { get; set; }
-        public Company Company { get; set; }
 
         public override string DisplayName
         {
@@ -20,6 +22,8 @@ namespace OpportunityData
             }
         }
 
+        [DataType(DataType.EmailAddress)]
+        [StringLength(1024, ErrorMessage = "Email cannot be longer than 1000 characters.")]
         public string Email { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using OpportunityTracker.Data;
 
 namespace OpportunityTracker.Pages.Opportunities
 {
-    public class EditModel : PageModel
+    public class EditModel : CompanyNamesPageModel
     {
         private readonly OpportunityTracker.Data.OpportunityTrackerContext _context;
 
@@ -39,7 +39,7 @@ namespace OpportunityTracker.Pages.Opportunities
                 return NotFound();
             }
 
-            ViewData["CompanyID"] = new SelectList(_context.Companies, "CompanyID", "CompanyID");
+            PopulateCompaniesDropDownList(_context);
             return Page();
         }
 
@@ -75,6 +75,7 @@ namespace OpportunityTracker.Pages.Opportunities
                 }
                 return RedirectToPage("./Index");
             }
+            PopulateCompaniesDropDownList(_context);
             return Page();
         }
 

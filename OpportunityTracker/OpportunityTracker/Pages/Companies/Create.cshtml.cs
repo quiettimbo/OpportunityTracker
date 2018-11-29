@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OpportunityData;
 using OpportunityTracker.Data;
 
-namespace OpportunityTracker.Pages.Opportunities
+namespace OpportunityTracker.Pages.Companies
 {
-    public class CreateModel : CompanyNamesPageModel
+    public class CreateModel : PageModel
     {
         private readonly OpportunityTracker.Data.OpportunityTrackerContext _context;
 
@@ -21,12 +21,11 @@ namespace OpportunityTracker.Pages.Opportunities
 
         public IActionResult OnGet()
         {
-            PopulateCompaniesDropDownList(_context);
             return Page();
         }
 
         [BindProperty]
-        public OpportunityData.Opportunity Opportunity { get; set; }
+        public Company Company { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -35,21 +34,10 @@ namespace OpportunityTracker.Pages.Opportunities
                 return Page();
             }
 
-            var emptyOpp = new OpportunityData.Opportunity();
-            emptyOpp.Time = DateTime.Now;
-            emptyOpp.IsActive = true;
+            _context.Companies.Add(Company);
+            await _context.SaveChangesAsync();
 
-            if (await TryUpdateModelAsync(
-                emptyOpp,
-                "opportunity",
-                o => o.Description, o => o.Title, o => o.CompanyID))
-            {
-                _context.Opportunities.Add(emptyOpp);
-                await _context.SaveChangesAsync();
-
-                return RedirectToPage("./Index");
-            }
-            return null;
+            return RedirectToPage("./Index");
         }
     }
 }

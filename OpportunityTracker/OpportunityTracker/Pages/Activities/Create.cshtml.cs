@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using OpportunityData;
 using OpportunityTracker.Data;
 
-namespace OpportunityTracker.Pages.Opportunities
+namespace OpportunityTracker.Pages.Activities
 {
-    public class CreateModel : CompanyNamesPageModel
+    public class CreateModel : PageModel
     {
         private readonly OpportunityTracker.Data.OpportunityTrackerContext _context;
 
@@ -19,37 +19,34 @@ namespace OpportunityTracker.Pages.Opportunities
             _context = context;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet(int OId)
         {
-            PopulateCompaniesDropDownList(_context);
+            Opportunity = await _context.Opportunities.FindAsync(OId);
+            Activity = new Activity
+            {
+                Date = DateTime.Now
+            };
             return Page();
         }
 
         [BindProperty]
+        public Activity Activity { get; set; }
+
         public OpportunityData.Opportunity Opportunity { get; set; }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int OId)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            var emptyOpp = new OpportunityData.Opportunity();
-            emptyOpp.Time = DateTime.Now;
-            emptyOpp.IsActive = true;
+            Activity.OpportunityID = OId;
 
-            if (await TryUpdateModelAsync(
-                emptyOpp,
-                "opportunity",
-                o => o.Description, o => o.Title, o => o.CompanyID))
-            {
-                _context.Opportunities.Add(emptyOpp);
-                await _context.SaveChangesAsync();
+            _context.Activity.Add(Activity);
+            await _context.SaveChangesAsync();
 
-                return RedirectToPage("./Index");
-            }
-            return null;
+            return RedirectToPage("../Opportunities/Details", new { id = OId });
         }
     }
 }

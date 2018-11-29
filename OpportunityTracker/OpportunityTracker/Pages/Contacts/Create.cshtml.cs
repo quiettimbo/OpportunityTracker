@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OpportunityData;
 using OpportunityTracker.Data;
+using OpportunityTracker.Pages.Opportunities;
 
-namespace OpportunityTracker.Pages.Opportunities
+namespace OpportunityTracker.Pages.Contacts
 {
     public class CreateModel : CompanyNamesPageModel
     {
@@ -26,7 +27,7 @@ namespace OpportunityTracker.Pages.Opportunities
         }
 
         [BindProperty]
-        public OpportunityData.Opportunity Opportunity { get; set; }
+        public Website Contact { get; set; }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -35,21 +36,10 @@ namespace OpportunityTracker.Pages.Opportunities
                 return Page();
             }
 
-            var emptyOpp = new OpportunityData.Opportunity();
-            emptyOpp.Time = DateTime.Now;
-            emptyOpp.IsActive = true;
+            _context.Contact.Add(Contact);
+            await _context.SaveChangesAsync();
 
-            if (await TryUpdateModelAsync(
-                emptyOpp,
-                "opportunity",
-                o => o.Description, o => o.Title, o => o.CompanyID))
-            {
-                _context.Opportunities.Add(emptyOpp);
-                await _context.SaveChangesAsync();
-
-                return RedirectToPage("./Index");
-            }
-            return null;
+            return RedirectToPage("./Index");
         }
     }
 }

@@ -43,35 +43,41 @@
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Opportunity.Activities)
+            <a asp-page="/Activities/Create" asp-route-OId="@Model.Opportunity.OpportunityID">Create New</a>
         </dt>
-        <dd>
-            <table class="table">
-                <tr>
-                    <th>Date</th>
-                    <th>Contact</th>
-                    <th>Activity Description</th>
-                    <th>Grade</th>
-                </tr>
-                @foreach (var item in Model.Opportunity.Activities)
-                {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Contact.DisplayName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Result)
-                    </td>
-                </tr>
-                }
-            </table>
-        </dd>
     </dl>
+</div>
+<div>
+        <table class="table">
+            <tr>
+                <th>Date</th>
+                <th>Contact</th>
+                <th>Activity Description</th>
+                <th>Result</th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model.Opportunity.Activities)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contact.DisplayName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Result)
+                </td>
+                <td>
+                    <a asp-page="/Activities/Edit" asp-route-OId="@item.OpportunityID" asp-route-Id="@item.ActivityID">Edit</a> |
+                    <a asp-page="/Activities/Delete" asp-route-OId="@item.OpportunityID" asp-route-Id="@item.ActivityID">Delete</a>
+                </td>
+            </tr>
+            }
+        </table>
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Opportunity.OpportunityID">Edit</a> |

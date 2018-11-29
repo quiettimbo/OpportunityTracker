@@ -18,5 +18,7 @@ namespace OpportunityTracker.Data
         public DbSet<Company> Companies { get; set; }
         public DbSet<Person> People { get; set; }
         public DbSet<Website> Websites { get; set; }
+        public DbSet<OpportunityData.Contact> Contact { get; set; }
+        public DbSet<OpportunityData.Activity> Activity { get; set; }
     }
 }

@@ -25,8 +25,9 @@
                 <span asp-validation-for="Opportunity.Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Opportunity.CompanyID" class="control-label"></label>
-                <select asp-for="Opportunity.CompanyID" class="form-control" asp-items="ViewBag.CompanyID"></select>
+                <label asp-for="Opportunity.Company" class="control-label"></label>
+                <a asp-page="../Companies/Create">Create New</a>
+                <select asp-for="Opportunity.CompanyID" class="form-control" asp-items="@Model.CompanyNameSL"></select>
                 <span asp-validation-for="Opportunity.CompanyID" class="text-danger"></span>
             </div>
             <div class="form-group">

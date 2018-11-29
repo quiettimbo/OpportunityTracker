@@ -10,20 +10,38 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
+
+<div class="form-actions no-color">
+    <p>
+        Filter by:
+        <a asp-page="./Index" asp-route-isActive="true">Active only</a>
+        <a asp-page="./Index" asp-route-isActive="false">Inactive only</a>
+        <a asp-page="./Index">Back to full List</a>
+    </p>
+</div>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Opportunity[0].Title)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.TitleSort">
+                    @Html.DisplayNameFor(model => model.Opportunity[0].Title)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Opportunity[0].Description)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.DescriptionSort">
+                    @Html.DisplayNameFor(model => model.Opportunity[0].Description)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Opportunity[0].Company)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.CompanySort">
+                    @Html.DisplayNameFor(model => model.Opportunity[0].Company)
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Opportunity[0].Time)
+                <a asp-page="./Index" asp-route-sortOrder="@Model.TimeSort">
+                    @Html.DisplayNameFor(model => model.Opportunity[0].Time)
+                </a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Opportunity[0].IsActive)
@@ -32,29 +50,49 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Opportunity) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Company.CompanyID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Time)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.OpportunityID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.OpportunityID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.OpportunityID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Opportunity)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Company.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.OpportunityID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.OpportunityID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.OpportunityID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+@{
+    var prevDisabled = !Model.Opportunity.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Opportunity.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Opportunity.PageIndex - 1)"
+   asp-route-isActiveFilter="@Model.IsActiveFilter"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Opportunity.PageIndex + 1)"
+   asp-route-isActiveFilter="@Model.IsActiveFilter"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
